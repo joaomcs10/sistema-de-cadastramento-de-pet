@@ -1,0 +1,505 @@
+"""
+Exercício Pet
+
+Instruções do Exercício
+
+    1. Crie uma classe chamada Pet.
+    2. A classe deve ter os seguintes atributos privados: _nome, _idade e _peso.
+        - Utilize métodos "getters" para cada um desses atributos.
+        - Utilize métodos "setters" para cada um desses atributos.
+
+        Os "setters" devem conter as seguintes validações:
+            - O nome deve ser uma string e não pode ser vazio.
+            - A idade deve ser um número inteiro e deve ser maior ou igual a 0.
+            - O peso deve ser um número flutuante e deve ser maior que 0.
+
+    3. Adicione um método exibir_info() que mostre as informações do pet.
+
+
+# Teste sua implementação
+meu_pet = Pet()
+meu_pet.set_nome("Buddy")
+meu_pet.set_idade(5)
+meu_pet.set_peso(9.5)
+meu_pet.exibir_info()
+
+Sua tarefa é completar a classe Pet seguindo as instruções.
+Certifique-se de utilizar "getters" e "setters" para controlar o acesso aos
+atributos da classe.
+"""
+
+class Pet:
+
+    lista_pets = []
+
+    def __init__(self,_nome: str, _idade : int, _peso: float):
+        self._nome = _nome
+        self._idade = _idade
+        self._peso = _peso
+
+    def get_nome(self):
+
+        return self._nome
+
+    def get_idade(self):
+
+        return self._idade
+
+    def get_peso(self):
+
+        return round( self._peso,2)
+
+    def set_nome(self,novo_nome):
+
+        if not novo_nome.replace(' ','').isalpha():
+
+            print('Nome invalido! Digite apenas letras')
+
+            return
+
+        self._nome = novo_nome
+
+    def set_idade(self, nova_idade):
+
+        if nova_idade <= 0:
+
+            print('Numero invalido, digite um numero positivo')
+
+            return
+
+        self._idade = nova_idade
+
+    def set_peso(self, novo_peso):
+
+        if novo_peso <= 0:
+
+            print('Numero invalido, digite um numero positivo')
+
+            return
+
+        self._peso = novo_peso
+
+    @staticmethod
+    def cadastrar():
+
+        while True:
+
+            _nome = str(input('Digite o nome: '))
+
+            if not _nome.replace(' ','').isalpha():
+
+                print('Nome invalido! Digite apenas o nome com letras')
+
+            elif any(pet.get_nome().lower() == _nome.lower() for pet in Pet.lista_pets): #verifica se ja existe um pet com esse nome, para evitar duplicada de nomes
+
+                print(f'Já existe um pet com o nome de {_nome}')
+
+            else:
+
+                print(f'Nome: {_nome} Adicionado com sucesso')
+
+                break
+
+        while True:
+
+            try:
+
+                _idade = int(input('Digite o idade: '))
+
+                if _idade <=0:
+
+                    print('Numero invalido, digite um numero positivo')
+                else:
+
+                    print(f'idade: {_idade} Adicionado com sucesso')
+
+                    break
+
+            except ValueError:
+
+                print('Entrada invalida')
+
+        while True:
+
+            try:
+
+                _peso = float(input('Digite o peso: '))
+
+                if _peso <= 0:
+
+                    print('Peso invalido, digite um peso positivo')
+
+                else:
+
+                    _peso = round(_peso,2)
+
+                    print(f'peso: {_peso:.2f} kg adicionado com sucesso')
+
+                    break
+
+            except ValueError:
+
+                print('Entrada invalida')
+
+        pet = Pet (_nome, _idade, _peso)
+        Pet.lista_pets.append(pet)
+
+        return pet
+
+
+    def exibir_info(self):
+
+        print(f'Nome: {self._nome}')
+        print(f'Idade: {self._idade} anos')
+        print(f'Peso: {self._peso} kg')
+
+    @staticmethod
+    def procurar_nome(nome):
+
+        if not Pet.lista_pets:
+
+            print('nenhum Pet cadastrado')
+
+            return
+
+        for pet in Pet.lista_pets:
+
+            if pet.get_nome().lower() == nome.lower():
+
+                pet.exibir_info()
+
+                return
+
+        print(f'nome: {nome} não esta cadastrado')
+
+    @staticmethod
+    def procurar_peso(peso):
+
+        if not Pet.lista_pets:
+
+            print(f'Nenhum Pet cadastrado')
+
+            return
+
+        for pet in Pet.lista_pets:
+
+            if pet.get_peso() == peso:
+
+                pet.exibir_info()
+
+                return
+
+        print(f'Nenhum Pet com {peso} kg encontrado')
+
+    @staticmethod
+    def procurar_idade(idade):
+
+        if not Pet.lista_pets:
+
+            print('nenhum Pet cadastrado')
+
+            return
+
+        for pet in Pet.lista_pets:
+
+            if pet.get_idade() == idade:
+
+                pet.exibir_info()
+
+                return
+
+        print(f'Nenhum Pet com {idade} anos encontrado')
+
+    def modificar_nome(self,novo_nome):
+
+        if not novo_nome.replace(' ', '').isalpha():
+
+            print('Nome invalido! Por favor digitar apenas letra')
+
+            return
+
+        self._nome = novo_nome
+
+        print(f'Nome: {self._nome} modificado com sucesso.')
+
+    def modificar_idade(self, nova_idade):
+
+        if nova_idade <= 0:
+
+            print('Numero invalido! Digite um numero maior que 0')
+
+            return
+
+        self._idade = nova_idade
+
+        print(f'Idade : {self._idade} modificada com sucesso')
+
+    def modificar_peso(self,novo_peso):
+
+        if novo_peso <= 0:
+
+            print('Numero invalido! Digite um numero maior que 0 ')
+
+            return
+        self._peso = round(novo_peso,2)
+
+        print(f'Peso : {self._peso:.2f} modificado com sucesso')
+
+
+def menu():
+
+    while True:
+
+        print('\n Bem Vindo ao Petplay')
+        print('\n Aqui você pode ter o controle sobre todos os seus Pet')
+        print('\n==== Menu PetPlay ====')
+        print('1 - cadastrar Pet')
+        print('2 - exibir informações')
+        print('3 - procurar Pet')
+        print('4 - Modificar dados do Pet')
+        print('5 - sair')
+
+        try:
+
+            entrada = int(input('Digite uma opção: '))
+
+        except ValueError:
+
+            print('Entrada invalida')
+            print('Tente novamente')
+
+            continue
+
+        if entrada == 1:
+
+            Pet.cadastrar()
+
+
+        elif entrada == 2:
+
+            if Pet.lista_pets:
+                for pet in Pet.lista_pets:
+                    pet.exibir_info()
+
+            else:
+                print('Nenhum Pet cadastrado')
+
+        elif entrada == 3:
+
+            sub_menu_exibir()
+
+        elif entrada == 4:
+
+            sub_menu_modificar()
+
+        elif entrada == 5:
+
+            print('Saindo do Petplay')
+            print('Obrigado por usar nosso sistema')
+
+            break
+
+        else:
+
+            print('Entrada invalida')
+
+def sub_menu_exibir():
+
+    while True:
+
+        print('===Informações Dos Pets===')
+        print('1 - Exibir Todos os Pets')
+        print('2 - Procurar Nome')
+        print('3 - Procurar por Peso')
+        print('4 - Procurar por Idade')
+        print('5 - Voltar')
+
+        try:
+
+            entrada = int(input('Digite uma Opção: '))
+
+        except ValueError:
+
+            print('Entrada invalida')
+            print('Tente novamente')
+
+            continue
+
+        if entrada == 1:
+
+            if Pet.lista_pets:
+                for pet in Pet.lista_pets:
+                    pet.exibir_info()
+
+            else:
+
+                print('Nenhum pet cadastrado.')
+
+        elif entrada == 2:
+
+            nome = input('Digite o nome: ')
+
+            if not nome.replace(' ', '').isalpha():
+
+                print('Nome invalido, digite apenas letras')
+
+            else:
+
+               Pet.procurar_nome(nome)
+
+
+        elif entrada == 3:
+
+            try:
+
+               peso = float(input('Digite o peso: '))
+
+               Pet.procurar_peso(peso)
+
+            except ValueError:
+
+                print('Entrada invalida, Digite um peso valido')
+
+        elif entrada == 4:
+
+            try:
+
+               idade = int(input('Digite sua idade: '))
+
+               if idade <=0:
+
+                   print('Entrada Invalida, Digite um numero Positivo')
+
+               else:
+
+                    Pet.procurar_idade(idade)
+
+            except ValueError:
+
+                print('Entrada invalida, Digite uma idade valida')
+
+        elif entrada == 5:
+
+            break
+
+        else:
+
+            print('Entrada invalida')
+
+def sub_menu_modificar():
+
+    while True:
+
+        print('===Modificar Dados ===')
+        print('1 - Modificar nome do Pet')
+        print('2 - Modificar peso do Pet')
+        print('3 - Modificar idade do Pet')
+        print('4 - Voltar')
+
+        try:
+
+            entrada = int(input('Digite uma opção: '))
+
+        except ValueError:
+
+            print('Entrada invalida')
+            print('Tente novamente')
+
+            continue
+
+        if entrada == 1:
+
+            nome = input('Digite o nome do Pet que deseja alterar: ')
+            novo_nome = input('Digite o novo nome: ')
+
+            for pet in Pet.lista_pets:
+
+                if pet.get_nome().lower() == nome.lower():
+
+                    pet.modificar_nome(novo_nome)
+
+                    break
+
+            else:
+
+                print(f'O nome : {nome} não encontrado')
+
+        elif entrada == 2:
+
+            nome = input('Digite o nome do Pet que deseja alterar o peso: ')
+
+            for pet in Pet.lista_pets:
+
+                if pet.get_nome().lower() == nome.lower():
+
+                    while True:
+
+
+                       try:
+
+                           novo_peso = float(input('Digite o novo peso do Pet:'))
+
+                           if novo_peso <= 0:
+
+                               print('Peso invalido! Digite um numero mair que 0')
+
+                           else:
+
+                                pet.modificar_peso(novo_peso)
+
+                                break
+
+                       except ValueError:
+
+                           print('Entrada invalida! Digite apenas numeros.')
+
+                    break
+
+            else:
+
+                print(f'nome: {nome} não encontrado')
+
+        elif entrada == 3:
+
+            nome = input('Digite o nome do Pet: ')
+
+            for pet in Pet.lista_pets:
+
+                if pet.get_nome().lower() == nome.lower():
+
+                    while True:
+
+
+                        try:
+
+                           nova_idade = int(input('Digite a nova idade: '))
+
+                           if nova_idade <= 0:
+
+                               print('Digite uma idade maior que 0')
+
+                           else:
+
+                               pet.modificar_idade(nova_idade)
+
+                               break
+
+                        except ValueError:
+
+                            print('Entrada invalida! Digite apenas numeros. ')
+
+                    break
+
+            else:
+
+                print(f'nome: {nome} não encontrado!')
+
+        elif entrada == 4:
+
+            break
+
+        else:
+
+            print('Entrada invalida')
+
+menu()
